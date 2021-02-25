@@ -14,9 +14,9 @@
         "package": "smoke-aws",
         "repositoryURL": "https://github.com/amzn/smoke-aws.git",
         "state": {
-          "branch": null,
-          "revision": "37e29e799758fb5b94eea5d8e2f6c7c70a4091b8",
-          "version": "2.36.6"
+          "branch": "additional_clients",
+          "revision": "ee9e2aca3ed1cc8361858ce71d0e92fbdf525640",
+          "version": null
         }
       },
       {
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/amzn/smoke-http.git",
         "state": {
           "branch": null,
-          "revision": "4cb7bf0dbbb0ae19ab362396b881308419e14f30",
-          "version": "2.3.2"
+          "revision": "6619fe6f8e56a85d9a7d9481c27afb2dc5688459",
+          "version": "2.7.0"
         }
       },
       {
