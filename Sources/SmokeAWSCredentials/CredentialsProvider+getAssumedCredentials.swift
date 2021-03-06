@@ -68,7 +68,7 @@ public extension SmokeAWSCore.CredentialsProvider {
         credentialsLogger[metadataKey: "credentials.source"] = "assumed.\(roleSessionName)"
         let reporting = CredentialsInvocationReporting(logger: credentialsLogger,
                                                        internalRequestId: "credentials.assumed.\(roleSessionName)",
-                                                       traceContext: traceContext)
+                                                       traceContext: traceContext, eventLoop: nil)
         
         return AWSSecurityTokenClient<CredentialsInvocationReporting<TraceContextType>>.getAssumedStaticCredentials(
             roleArn: roleArn,
@@ -136,7 +136,7 @@ public extension SmokeAWSCore.CredentialsProvider {
         credentialsLogger[metadataKey: "credentials.source"] = "assumed.\(roleSessionName)"
         let reporting = CredentialsInvocationReporting(logger: credentialsLogger,
                                                        internalRequestId: "credentials.assumed.\(roleSessionName)",
-                                                       traceContext: traceContext)
+                                                       traceContext: traceContext, eventLoop: nil)
         
         return AWSSecurityTokenClient<CredentialsInvocationReporting<TraceContextType>>.getAssumedRotatingCredentials(
             roleArn: roleArn,

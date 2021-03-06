@@ -22,16 +22,21 @@ import Logging
 import SmokeHTTPClient
 import AsyncHTTPClient
 import NIOHTTP1
+import NIO
 
 internal struct CredentialsInvocationReporting<TraceContextType: InvocationTraceContext>: HTTPClientCoreInvocationReporting {
     public let logger: Logger
     public var internalRequestId: String
     public var traceContext: TraceContextType
+    var eventLoop: EventLoop?
+    var outwardsRequestAggregator: OutwardsRequestAggregator?
     
-    public init(logger: Logger, internalRequestId: String, traceContext: TraceContextType) {
+    public init(logger: Logger, internalRequestId: String, traceContext: TraceContextType, eventLoop: EventLoop?) {
         self.logger = logger
         self.internalRequestId = internalRequestId
         self.traceContext = traceContext
+        self.eventLoop = eventLoop
+        self.outwardsRequestAggregator = nil
     }
 }
 
@@ -100,7 +105,7 @@ public extension AwsContainerRotatingCredentialsProvider {
             credentialsLogger[metadataKey: "credentials.source"] = "environment"
             let reporting = CredentialsInvocationReporting(logger: credentialsLogger,
                                                            internalRequestId: "credentials.environment",
-                                                           traceContext: traceContext)
+                                                           traceContext: traceContext, eventLoop: nil)
             
             let dataRetrieverProvider: (String) -> () throws -> Data = { credentialsPath in
                 return {

@@ -21,6 +21,7 @@ import SecurityTokenClient
 import SecurityTokenModel
 import SmokeHTTPClient
 import SmokeAWSCore
+import NIO
 
 @available(OSX 10.12, *)
 private let iso8601DateFormatter = ISO8601DateFormatter()
@@ -36,12 +37,14 @@ extension Date {
 }
 
 class SmokeAWSCredentialsTests: XCTestCase {
-    func getAssumeRoleSync()
-    -> SecurityTokenClientProtocol.AssumeRoleSyncType {
+    func getAssumeRoleEventLoopFutureAsync(eventLoop: EventLoop)
+    -> SecurityTokenClientProtocol.AssumeRoleEventLoopFutureAsyncType {
         let expiration = Date(timeIntervalSinceNow: 305)
         let expiryString = expiration.iso8601
         
-        func assumeRoleSync(input: SecurityTokenModel.AssumeRoleRequest) throws -> SecurityTokenModel.AssumeRoleResponseForAssumeRole {
+        func assumeRole(input: SecurityTokenModel.AssumeRoleRequest) -> EventLoopFuture<SecurityTokenModel.AssumeRoleResponseForAssumeRole> {
+            let promise = eventLoop.makePromise(of: SecurityTokenModel.AssumeRoleResponseForAssumeRole.self)
+            
             let credentials = SecurityTokenModel.Credentials(accessKeyId: TestVariables.accessKeyId,
                                                              expiration: expiryString,
                                                              secretAccessKey: TestVariables.secretAccessKey,
@@ -52,10 +55,12 @@ class SmokeAWSCredentialsTests: XCTestCase {
                 credentials: credentials,
                 packedPolicySize: nil)
             
-            return SecurityTokenModel.AssumeRoleResponseForAssumeRole(assumeRoleResult: assumeRoleResult)
+            promise.succeed(SecurityTokenModel.AssumeRoleResponseForAssumeRole(assumeRoleResult: assumeRoleResult))
+            
+            return promise.futureResult
         }
         
-        return assumeRoleSync
+        return assumeRole
     }
     
     struct TestExpiringCredentialsRetriever: ExpiringCredentialsRetriever {
@@ -64,12 +69,13 @@ class SmokeAWSCredentialsTests: XCTestCase {
         let roleSessionName: String
         let durationSeconds: Int?
         
-        init(assumeRoleSyncOverride: @escaping SecurityTokenClientProtocol.AssumeRoleSyncType,
+        init(assumeRoleEventLoopFutureAsync: @escaping SecurityTokenClientProtocol.AssumeRoleEventLoopFutureAsyncType,
              roleArn: String,
              roleSessionName: String,
              durationSeconds: Int?,
-             retryConfiguration: HTTPClientRetryConfiguration) {
-            self.client = MockSecurityTokenClient(assumeRoleSync: assumeRoleSyncOverride)
+             retryConfiguration: HTTPClientRetryConfiguration,
+             eventLoop: EventLoop) {
+            self.client = MockSecurityTokenClient(eventLoop: eventLoop, assumeRoleEventLoopFutureAsync: assumeRoleEventLoopFutureAsync)
             self.roleArn = roleArn
             self.roleSessionName = roleSessionName
             self.durationSeconds = durationSeconds
@@ -92,12 +98,19 @@ class SmokeAWSCredentialsTests: XCTestCase {
     }
     
     func testRotatingGetCredentials() throws {
+        let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+        defer {
+            try? eventLoopGroup.syncShutdownGracefully()
+        }
+        let eventLoop = eventLoopGroup.next()
+        
         let credentialsRetriever = TestExpiringCredentialsRetriever(
-            assumeRoleSyncOverride: getAssumeRoleSync(),
+            assumeRoleEventLoopFutureAsync: getAssumeRoleEventLoopFutureAsync(eventLoop: eventLoop),
             roleArn: "arn:aws:iam::XXXXXXXXXXXX:role/theRole",
             roleSessionName: "mySession",
             durationSeconds: 3600,
-            retryConfiguration: .default)
+            retryConfiguration: .default,
+            eventLoop: eventLoop)
         
         let credentials = try credentialsRetriever.get()
         XCTAssertEqual(TestVariables.accessKeyId, credentials.accessKeyId)
@@ -109,7 +122,14 @@ class SmokeAWSCredentialsTests: XCTestCase {
     }
     
     func testStaticGetCredentials() throws {
-        let client = MockSecurityTokenClient(assumeRoleSync: getAssumeRoleSync())
+        let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+        defer {
+            try? eventLoopGroup.syncShutdownGracefully()
+        }
+        let eventLoop = eventLoopGroup.next()
+        
+        let client = MockSecurityTokenClient(eventLoop: eventLoop,
+                                             assumeRoleEventLoopFutureAsync: getAssumeRoleEventLoopFutureAsync(eventLoop: eventLoop))
         
         let credentials = try client.getAssumedExpiringCredentials(
                 roleArn: "arn:aws:iam::XXXXXXXXXXXX:role/theRole",

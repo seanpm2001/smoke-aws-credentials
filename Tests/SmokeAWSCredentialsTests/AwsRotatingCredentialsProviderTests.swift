@@ -6,6 +6,7 @@
 import XCTest
 @testable import SmokeAWSCredentials
 import SmokeHTTPClient
+import NIO
 
 struct AlwaysValidRetriever: ExpiringCredentialsRetriever {
     func close() {
@@ -71,13 +72,19 @@ class AwsRotatingCredentialsProviderTests: XCTestCase {
             expiringCredentialsRetriever: AlwaysValidRetriever(),
             scheduler: scheduler)
         
+        let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+        defer {
+            try? eventLoopGroup.syncShutdownGracefully()
+        }
+        let eventLoop = eventLoopGroup.next()
+        
         // simulate 100 successful credentials
         for _ in 0..<100 {
             let beforeExpiration = Date(timeIntervalSinceNow: 60)
             
             provider.scheduleUpdateCredentials(beforeExpiration: beforeExpiration,
                                                roleSessionName: "roleSessionName",
-                                               reporting: MockCoreInvocationReporting())
+                                               reporting: MockCoreInvocationReporting(eventLoop: eventLoop))
             // make sure we schedule the credentials once per invocation
             scheduler.doWork = true
         }
@@ -92,12 +99,18 @@ class AwsRotatingCredentialsProviderTests: XCTestCase {
             expiringCredentialsRetriever: retriever,
             scheduler: scheduler)
         
+        let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+        defer {
+            try? eventLoopGroup.syncShutdownGracefully()
+        }
+        let eventLoop = eventLoopGroup.next()
+        
         for _ in 0..<100 {
             let beforeExpiration = Date(timeIntervalSinceNow: 60)
             
             provider.scheduleUpdateCredentials(beforeExpiration: beforeExpiration,
                                                roleSessionName: "roleSessionName",
-                                               reporting: MockCoreInvocationReporting())
+                                               reporting: MockCoreInvocationReporting(eventLoop: eventLoop))
             // make sure we schedule the credentials once per invocation
             scheduler.doWork = true
         }

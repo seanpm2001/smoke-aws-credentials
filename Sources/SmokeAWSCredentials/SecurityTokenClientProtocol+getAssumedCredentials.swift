@@ -85,7 +85,7 @@ extension SecurityTokenClientProtocol {
         let output: SecurityTokenModel.AssumeRoleResponseForAssumeRole
         do {
             // call to assume the role
-            output = try assumeRoleSync(input: input)
+            output = try assumeRole(input: input).wait()
         } catch {
             throw AssumingRoleError.unableToAssumeRole(arn: roleArn, error: error)
         }
