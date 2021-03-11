@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/swift-server/async-http-client.git",
         "state": {
           "branch": null,
-          "revision": "ba845ee93d6ea10671e829ebf273b6f7a0c92ef0",
-          "version": "1.2.4"
+          "revision": "0dda95cffcdf3d96ca551e5701efd1661cf31374",
+          "version": "1.2.5"
         }
       },
       {
@@ -15,7 +15,7 @@
         "repositoryURL": "https://github.com/amzn/smoke-aws.git",
         "state": {
           "branch": "event_loop_future",
-          "revision": "8d3cba0e8e74beec6d9ea61c9cc167e670674a89",
+          "revision": "302927ce447a09789cbaabc9920227681932dbf6",
           "version": null
         }
       },
