@@ -15,7 +15,7 @@
         "repositoryURL": "https://github.com/amzn/smoke-aws.git",
         "state": {
           "branch": "event_loop_future",
-          "revision": "302927ce447a09789cbaabc9920227681932dbf6",
+          "revision": "46530eb0d27edc15ed148dff74096c4d0c51c4c0",
           "version": null
         }
       },
