@@ -104,9 +104,16 @@ public extension AwsContainerRotatingCredentialsProvider {
             
             let dataRetrieverProvider: (String) -> () throws -> Data = { credentialsPath in
                 return {
+                    let infix: String
+                    if let hostPostfix = credentialsHost.last, hostPostfix != "/" {
+                        infix = "/"
+                    } else {
+                        infix = ""
+                    }
+                    
                     let completedSemaphore = DispatchSemaphore(value: 0)
                     var result: Result<HTTPClient.Response, Error>?
-                    let endpoint = "http://\(credentialsHost)/\(credentialsPath)"
+                    let endpoint = "http://\(credentialsHost)\(infix)\(credentialsPath)"
                     
                     let headers = [("User-Agent", "SmokeAWSCredentials"),
                         ("Content-Length", "0"),
@@ -126,8 +133,12 @@ public extension AwsContainerRotatingCredentialsProvider {
                     completedSemaphore.wait()
                     
                     guard let theResult = result else {
+                        credentialsLogger.debug("Retreived environment credentials: no response")
+                        
                         throw CredentialsHTTPError.noResponse
                     }
+                    
+                    credentialsLogger.debug("Retreived environment credentials.")
                     
                     switch theResult {
                     case .success(let response):
