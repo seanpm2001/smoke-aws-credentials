@@ -6,26 +6,26 @@
         "repositoryURL": "https://github.com/swift-server/async-http-client.git",
         "state": {
           "branch": null,
-          "revision": "8e4d51908dd49272667126403bf977c5c503f78f",
-          "version": "1.5.0"
+          "revision": "8fa7f082b155ea325bcf7b2dbffaf81d4eea1ae4",
+          "version": "1.5.1"
         }
       },
       {
         "package": "smoke-aws",
         "repositoryURL": "https://github.com/amzn/smoke-aws.git",
         "state": {
-          "branch": null,
-          "revision": "770dfceb85a41e1c645a8b674832e5560a2147a7",
-          "version": "2.39.0"
+          "branch": "configurable_connection_pool",
+          "revision": "5c89306b92d4a17a937a0f852a87597f4b06bcee",
+          "version": null
         }
       },
       {
         "package": "smoke-http",
         "repositoryURL": "https://github.com/amzn/smoke-http.git",
         "state": {
-          "branch": null,
-          "revision": "0f0ac49e96208b709a58a5e5d59d05bab44957aa",
-          "version": "2.8.5"
+          "branch": "configurable_connection_pool",
+          "revision": "b423aa8b2934942cc3b0fc40bea5f19e39e67ec9",
+          "version": null
         }
       },
       {
@@ -35,15 +35,6 @@
           "branch": null,
           "revision": "3bea268b223651c4ab7b7b9ad62ef9b2d4143eb6",
           "version": "1.1.6"
-        }
-      },
-      {
-        "package": "swift-log",
-        "repositoryURL": "https://github.com/apple/swift-log.git",
-        "state": {
-          "branch": null,
-          "revision": "5d66f7ba25daf4f94100e7022febf3c75e37a6c7",
-          "version": "1.4.2"
         }
       },
       {
@@ -60,8 +51,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio.git",
         "state": {
           "branch": null,
-          "revision": "9a992ee3de1f8da9f2968fc96b26714834f3105f",
-          "version": "2.31.1"
+          "revision": "addf69cfe60376c325397c8926589415576b1dd1",
+          "version": "2.34.0"
         }
       },
       {
