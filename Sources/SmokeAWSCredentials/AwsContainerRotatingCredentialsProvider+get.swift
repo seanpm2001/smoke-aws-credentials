@@ -129,6 +129,9 @@ public extension AwsContainerRotatingCredentialsProvider {
                         result = returnedResult
                         completedSemaphore.signal()
                     }
+                    defer {
+                        try? httpClient.syncShutdown()
+                    }
                     
                     completedSemaphore.wait()
                     
