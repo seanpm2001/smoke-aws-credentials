@@ -120,7 +120,7 @@ public extension AwsContainerRotatingCredentialsProvider {
                         ("Host", credentialsHost),
                         ("Accept", "*/*")]
                     
-                    credentialsLogger.debug("Retreiving environment credentials from endpoint: \(endpoint)")
+                    credentialsLogger.debug("Retrieving environment credentials from endpoint: \(endpoint)")
                     
                     let request = try HTTPClient.Request(url: endpoint, method: .GET, headers: HTTPHeaders(headers))
                     
@@ -133,12 +133,12 @@ public extension AwsContainerRotatingCredentialsProvider {
                     completedSemaphore.wait()
                     
                     guard let theResult = result else {
-                        credentialsLogger.debug("Retreived environment credentials: no response")
+                        credentialsLogger.debug("Retrieved environment credentials: no response")
                         
                         throw CredentialsHTTPError.noResponse
                     }
                     
-                    credentialsLogger.debug("Retreived environment credentials.")
+                    credentialsLogger.debug("Retrieved environment credentials.")
                     
                     switch theResult {
                     case .success(let response):
@@ -146,8 +146,15 @@ public extension AwsContainerRotatingCredentialsProvider {
                         if case .ok = response.status {
                             if var body = response.body {
                                 let byteBufferSize = body.readableBytes
-                                return body.readData(length: byteBufferSize) ?? Data()
+                                let data = body.readData(length: byteBufferSize) ?? Data()
+                                
+                                let dataAsString = String(data: data, encoding: .utf8)
+                                credentialsLogger.debug("Retrieved environment credentials as: '\(dataAsString ?? "")'.")
+                                
+                                return data
                             } else {
+                                credentialsLogger.debug("Retrieved environment credentials with empty body.")
+                                
                                 return Data()
                             }
                         }
@@ -161,6 +168,8 @@ public extension AwsContainerRotatingCredentialsProvider {
                         } else {
                             bodyAsString = nil
                         }
+                        
+                        credentialsLogger.debug("Retrieved environment credentials as error: '\(bodyAsString ?? "")'.")
                         
                         throw CredentialsHTTPError.errorResponse(response.status.code, bodyAsString)
                     case .failure(let error):
