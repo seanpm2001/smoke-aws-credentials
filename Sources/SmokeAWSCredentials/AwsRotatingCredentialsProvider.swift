@@ -134,6 +134,8 @@ public class AwsRotatingCredentialsProvider: StoppableCredentialsProvider {
             // if this instance isn't in the initialized state, do nothing
             return
         }
+                
+        reporting.logger.info("Start credentials with: \(expiringCredentials)")
         
         // only actually need to start updating credentials if the
         // initial ones expire
