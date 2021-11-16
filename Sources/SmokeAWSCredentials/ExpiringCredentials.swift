@@ -17,6 +17,7 @@
 
 import Foundation
 import SmokeAWSCore
+import Logging
 
 /**
  Structure that holds and is used to decode the response from AWS Metadata service.
@@ -84,7 +85,12 @@ public struct ExpiringCredentials: Codable, SmokeAWSCore.Credentials {
     static func getCurrentCredentials(dataRetriever: () throws -> Data) throws -> ExpiringCredentials {
         let data = try dataRetriever()
         
+        let tempLogger = Logger(label: "ExpiringCredentials")
+        tempLogger.info("Data retrieved")
+        
         let expiringCredentials = try jsonDecoder.decode(ExpiringCredentials.self, from: data)
+        
+        tempLogger.info("Data decoded")
         
         // ensure we are not getting junk credentials data
         guard expiringCredentials.accessKeyId != nullString,

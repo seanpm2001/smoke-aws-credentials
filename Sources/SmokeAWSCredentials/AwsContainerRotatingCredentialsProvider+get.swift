@@ -326,13 +326,18 @@ public extension AwsContainerRotatingCredentialsProvider {
     private static func createRotatingCredentialsProvider<InvocationReportingType: HTTPClientCoreInvocationReporting>(
         reporting: InvocationReportingType,
         dataRetriever: @escaping () throws -> Data) throws
-        -> StoppableCredentialsProvider {
+    -> StoppableCredentialsProvider {
+        reporting.logger.debug("Get credentialsRetriever.")
         let credentialsRetriever = FromDataExpiringCredentialsRetriever(
             dataRetriever: dataRetriever)
+        
+        reporting.logger.debug("Get awsContainerRotatingCredentialsProvider.")
             
         let awsContainerRotatingCredentialsProvider =
             try AwsContainerRotatingCredentialsProvider(
                 expiringCredentialsRetriever: credentialsRetriever)
+        
+        reporting.logger.debug("Start awsContainerRotatingCredentialsProvider.")
         
         awsContainerRotatingCredentialsProvider.start(
             roleSessionName: nil,
