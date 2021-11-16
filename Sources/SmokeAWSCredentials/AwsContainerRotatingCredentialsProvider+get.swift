@@ -105,7 +105,7 @@ public extension AwsContainerRotatingCredentialsProvider {
             let dataRetrieverProvider: (String) -> () throws -> Data = { credentialsPath in
                 return {
                     let infix: String
-                    if let hostPostfix = credentialsHost.last, hostPostfix != "/" {
+                    if let credentialsPrefix = credentialsPath.first, credentialsPrefix != "/" {
                         infix = "/"
                     } else {
                         infix = ""
