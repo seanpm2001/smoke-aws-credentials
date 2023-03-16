@@ -43,7 +43,7 @@ internal struct CredentialsInvocationReporting<TraceContextType: InvocationTrace
     }
 }
 
-@available(swift, deprecated: 3.0, message: "Migrate to AwsContainerRotatingCredentialsProviderV2")
+@available(*, deprecated, renamed: "AwsContainerRotatingCredentialsProviderV2")
 public typealias AwsContainerRotatingCredentialsProvider = AwsRotatingCredentialsProvider
 
 public typealias AwsContainerRotatingCredentialsProviderV2 = AwsRotatingCredentialsProviderV2
@@ -55,7 +55,7 @@ enum CredentialsHTTPError: Error {
     case noResponse
 }
 
-@available(swift, deprecated: 3.0, message: "Migrate to AwsContainerRotatingCredentialsProviderV2")
+@available(*, deprecated, renamed: "AwsContainerRotatingCredentialsProviderV2")
 public extension AwsContainerRotatingCredentialsProvider {
     // the endpoint for obtaining credentials from the ECS container
     // https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html

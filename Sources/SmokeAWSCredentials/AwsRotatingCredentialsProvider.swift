@@ -75,7 +75,7 @@ public extension ExpiringCredentialsRetriever {
 /**
  Class that manages the rotating credentials.
  */
-@available(swift, deprecated: 3.0, message: "Migrate to AwsRotatingCredentialsProviderV2")
+@available(*, deprecated, renamed: "AwsRotatingCredentialsProviderV2")
 public class AwsRotatingCredentialsProvider: StoppableCredentialsProvider {
     public var credentials: Credentials {
         // the provider returns a copy of the current

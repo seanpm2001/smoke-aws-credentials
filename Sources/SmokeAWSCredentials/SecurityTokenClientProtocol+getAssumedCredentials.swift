@@ -59,7 +59,7 @@ internal struct AWSSTSExpiringCredentialsRetriever<InvocationReportingType: HTTP
         try await self.client.shutdown()
     }
     
-    @available(swift, deprecated: 3.0, message: "Migrate to getCredentials")
+    @available(*, deprecated, renamed: "getCredentials")
     func get() throws -> ExpiringCredentials {
         return try client.getAssumedExpiringCredentials(
                     roleArn: roleArn,
@@ -87,7 +87,7 @@ extension SecurityTokenClientProtocol {
             range from 900 seconds (15 minutes) to 3600 seconds (1 hour). By default, the value
             is set to 3600 seconds.
      */
-    @available(swift, deprecated: 3.0, message: "Migrate to getAssumedExpiringCredentialsV2")
+    @available(*, deprecated, renamed: "getAssumedExpiringCredentialsV2")
     internal func getAssumedExpiringCredentials(roleArn: String,
                                                 roleSessionName: String,
                                                 durationSeconds: Int?) throws -> ExpiringCredentials {
@@ -141,7 +141,7 @@ extension SecurityTokenClientProtocol {
     /**
      Function that retrieves StaticCredentials from the provided token service.
      */
-    @available(swift, deprecated: 3.0, message: "Migrate to getAssumedStaticCredentialsV2")
+    @available(*, deprecated, renamed: "getAssumedStaticCredentialsV2")
     internal static func getAssumedStaticCredentials<InvocationReportingType: HTTPClientCoreInvocationReporting>(
         roleArn: String,
         roleSessionName: String,
@@ -210,7 +210,7 @@ extension SecurityTokenClientProtocol {
     /**
      Function that retrieves AssumedRotatingCredentials from the provided token service.
      */
-    @available(swift, deprecated: 3.0, message: "Migrate to getAssumedRotatingCredentialsV2")
+    @available(*, deprecated, renamed: "getAssumedRotatingCredentialsV2")
     internal static func getAssumedRotatingCredentials<InvocationReportingType: HTTPClientCoreInvocationReporting>(
         roleArn: String,
         roleSessionName: String,

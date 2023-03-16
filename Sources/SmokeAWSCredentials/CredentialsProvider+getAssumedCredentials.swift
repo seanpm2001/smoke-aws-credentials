@@ -35,7 +35,7 @@ public extension SmokeAWSCore.CredentialsProvider {
        - retryConfiguration: the client retry configuration to use to get the credentials.
                              If not present, the default configuration will be used.
     */
-    @available(swift, deprecated: 3.0, message: "Migrate to getAssumedStaticCredentialsV2")
+    @available(*, deprecated, renamed: "getAssumedStaticCredentialsV2")
     func getAssumedStaticCredentials(
            roleArn: String,
            roleSessionName: String,
@@ -81,7 +81,7 @@ public extension SmokeAWSCore.CredentialsProvider {
         - retryConfiguration: the client retry configuration to use to get the credentials.
                               If not present, the default configuration will be used.
      */
-    @available(swift, deprecated: 3.0, message: "Migrate to getAssumedStaticCredentialsV2")
+    @available(*, deprecated, renamed: "getAssumedStaticCredentialsV2")
     func getAssumedStaticCredentials<TraceContextType: InvocationTraceContext>(
             roleArn: String,
             roleSessionName: String,
@@ -147,7 +147,7 @@ public extension SmokeAWSCore.CredentialsProvider {
                              If not present, the default configuration will be used.
        - eventLoopProvider: the provider of the event loop for obtaining these credentials.
     */
-    @available(swift, deprecated: 3.0, message: "Migrate to getAssumedRotatingCredentialsV2")
+    @available(*, deprecated, renamed: "getAssumedRotatingCredentialsV2")
     func getAssumedRotatingCredentials(roleArn: String,
                                        roleSessionName: String,
                                        durationSeconds: Int?,
@@ -210,7 +210,7 @@ public extension SmokeAWSCore.CredentialsProvider {
                               If not present, the default configuration will be used.
         - eventLoopProvider: the provider of the event loop for obtaining these credentials.
      */
-    @available(swift, deprecated: 3.0, message: "Migrate to getAssumedRotatingCredentialsV2")
+    @available(*, deprecated, renamed: "getAssumedRotatingCredentialsV2")
     func getAssumedRotatingCredentials<TraceContextType: InvocationTraceContext>(
             roleArn: String,
             roleSessionName: String,
