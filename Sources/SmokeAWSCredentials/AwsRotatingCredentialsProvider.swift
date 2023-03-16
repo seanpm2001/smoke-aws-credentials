@@ -26,6 +26,17 @@ import Logging
 	import Darwin
 #endif
 
+internal extension NSLocking {
+    func withLock<R>(_ body: () throws -> R) rethrows -> R {
+        self.lock()
+        defer {
+            self.unlock()
+        }
+        
+        return try body()
+    }
+}
+
 internal protocol AsyncAfterScheduler {
     func asyncAfter(deadline: DispatchTime, qos: DispatchQoS,
                     flags: DispatchWorkItemFlags,
