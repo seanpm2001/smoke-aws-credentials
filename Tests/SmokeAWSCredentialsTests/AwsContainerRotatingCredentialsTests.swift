@@ -119,13 +119,5 @@ class AwsContainerRotatingCredentialsTests: XCTestCase {
         
         XCTAssertNil(credentialsProvider)
     }
-
-    static var allTests = [
-        ("testGetCredentials", testGetCredentials),
-        ("testGetInvalidCredentials", testGetInvalidCredentials),
-        ("testGetAwsContainerCredentials", testGetAwsContainerCredentials),
-        ("testStaticCredentials", testStaticCredentials),
-        ("testNoCredentials", testNoCredentials),
-    ]
 }
 

@@ -119,10 +119,4 @@ class SmokeAWSCredentialsTests: XCTestCase {
         XCTAssertEqual(TestVariables.secretAccessKey, credentials.secretAccessKey)
         XCTAssertEqual(TestVariables.sessionToken, credentials.sessionToken)
     }
-
-
-    static var allTests = [
-        ("testRotatingGetCredentials", testRotatingGetCredentials),
-        ("testStaticGetCredentials", testStaticGetCredentials)
-    ]
 }
